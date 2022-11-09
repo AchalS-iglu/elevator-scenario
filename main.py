@@ -13,9 +13,23 @@ class Building():
     def call(self, floor, direction):
         dist = []
         for elevator in self.elevators:
-            dist.append(abs(elevator.cur_floor - floor))
-        self.elevators[dist[dist.index(min(dist))]].call(floor)
-                
+            if elevator.dir == IDLE:
+                dist.append(abs(elevator.cur_floor - floor)) 
+            if direction == UP:
+                if elevator.cur_floor < floor and elevator.dir == UP:
+                    dist.append((abs(elevator.cur_floor - floor)) * (1/self.floors))
+                else:
+                    dist.append((abs(elevator.cur_floor - floor)) * (self.floors))
+            elif direction == DOWN:
+                if elevator.cur_floor > floor and elevator.dir == DOWN:
+                    dist.append((abs(elevator.cur_floor - floor)) * (1/self.floors))
+                else:
+                    dist.append((abs(elevator.cur_floor - floor)) * (self.floors))
+            else:
+                dist.append((abs(elevator.cur_floor - floor)) * (self.floors))
+            #dist.append([elevator.dir, abs(elevator.cur_floor - floor)])
+        #self.elevators[dist[dist.index(min(dist))]].call(floor)
+        
 
 class Elevator():
     def __init__(self, max_capacity = 8):
